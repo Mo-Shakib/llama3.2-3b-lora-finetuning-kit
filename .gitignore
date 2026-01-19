@@ -1,0 +1,84 @@
+# --- Python bytecode / cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.pytype/
+.ruff_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+.python-version
+
+# --- Packaging / build artifacts ---
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# --- Unit test / coverage ---
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+nosetests.xml
+pytestdebug.log
+
+# --- Jupyter / notebooks ---
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Secrets / env files ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- Tooling ---
+.tox/
+.nox/
+.hypothesis/
+.cache/
+
+# --- Data / outputs (common in ML) ---
+data/
+datasets/
+outputs/
+runs/
+wandb/
+mlruns/
+checkpoints/
+models/
+*.ckpt
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.safetensors
+*.onnx
+*.tflite
+*.h5
+
+# --- Local configs ---
+config.local.*
+local_settings.py
