@@ -1,0 +1,17 @@
+# TuneKit Training Requirements
+# ================================
+# Install with: pip install -r requirements.txt
+#
+# For best results, use a virtual environment:
+#   python -m venv venv
+#   source venv/bin/activate  # On Windows: venv\Scripts\activate
+#   pip install -r requirements.txt
+
+# Unsloth - Fast LoRA training (2-5x faster, 70% less memory)
+# This will install all required dependencies automatically
+unsloth
+
+# If you encounter issues, try:
+#   pip uninstall unsloth unsloth_zoo -y
+#   pip install --no-deps git+https://github.com/unslothai/unsloth_zoo.git
+#   pip install --no-deps git+https://github.com/unslothai/unsloth.git
