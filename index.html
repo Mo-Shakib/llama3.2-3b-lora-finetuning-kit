@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llama 3.2 3B LoRA Finetuning Kit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        hf: {
+                            yellow: '#FFD21E',
+                            dark: '#0B0F19',
+                            card: '#1F2937'
+                        },
+                        unsloth: {
+                            neon: '#a3e635', // lime-400
+                            glow: 'rgba(163, 230, 53, 0.5)'
+                        },
+                        llama: {
+                            blue: '#2563EB',
+                            purple: '#7C3AED'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0F19; /* Deep dark background */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 25%), 
+                radial-gradient(circle at 85% 30%, rgba(163, 230, 53, 0.05) 0%, transparent 25%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4B5563;
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #60A5FA, #A78BFA, #a3e635);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(31, 41, 55, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-window {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="text-slate-300 antialiased selection:bg-hf-yellow selection:text-black">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#0B0F19]/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-llama-blue to-unsloth-neon flex items-center justify-center text-black font-bold text-lg">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-white">Llama 3.2 Finetune Kit</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#overview" class="hover:text-hf-yellow transition-colors">Overview</a>
+                    <a href="#quickstart" class="hover:text-hf-yellow transition-colors">Quick Start</a>
+                    <a href="#config" class="hover:text-hf-yellow transition-colors">Config</a>
+                    <a href="#troubleshooting" class="hover:text-hf-yellow transition-colors">FAQ</a>
+                </div>
+                <a href="https://github.com/Mo-Shakib/llama3.2-3b-lora-finetuning-kit" target="_blank" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-all border border-white/5 group">
+                    <i class="fa-brands fa-github text-lg group-hover:scale-110 transition-transform"></i>
+                    <span>Star on GitHub</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-6">
+                <span class="w-2 h-2 rounded-full bg-unsloth-neon animate-pulse"></span>
+                Powered by Unsloth
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6">
+                Finetune <span class="text-gradient">Llama 3.2 3B</span><br />
+                Faster & Efficiently
+            </h1>
+            
+            <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                A complete kit for LoRA fine-tuning using Unsloth. 
+                Experience <span class="text-white font-semibold">2-5x faster training</span> 
+                with <span class="text-white font-semibold">70% less memory</span> usage.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quickstart" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-black bg-hf-yellow hover:bg-[#ebbf00] transition-colors shadow-[0_0_20px_rgba(255,210,30,0.3)]">
+                    <i class="fa-solid fa-play mr-2"></i> Start Training
+                </a>
+                <a href="#features" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    Learn More
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-16 text-left">
+                <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                    <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Base Model</div>
+                    <div class="font-mono text-sm text-blue-400">Llama-3.2-3B-Instruct</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                    <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Method</div>
+                    <div class="font-mono text-sm text-unsloth-neon">LoRA (Unsloth)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                    <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Memory Saving</div>
+                    <div class="font-mono text-sm text-emerald-400">~70% Less</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                    <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Quantization</div>
+                    <div class="font-mono text-sm text-purple-400">4-bit Native</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="py-20 bg-[#0F1420]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Why Unsloth?</h2>
+                <div class="h-1 w-20 bg-gradient-to-r from-llama-blue to-unsloth-neon mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-unsloth-neon/50 transition-colors group">
+                    <div class="w-12 h-12 rounded-lg bg-unsloth-neon/10 flex items-center justify-center mb-4 group-hover:bg-unsloth-neon/20 transition-colors">
+                        <i class="fa-solid fa-bolt text-unsloth-neon text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Blazing Fast</h3>
+                    <p class="text-slate-400">Optimized kernels provide 2-5x faster training speeds compared to standard HF implementations.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-llama-blue/50 transition-colors group">
+                    <div class="w-12 h-12 rounded-lg bg-llama-blue/10 flex items-center justify-center mb-4 group-hover:bg-llama-blue/20 transition-colors">
+                        <i class="fa-solid fa-memory text-llama-blue text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Memory Efficient</h3>
+                    <p class="text-slate-400">Drastically reduces VRAM usage by 70%, allowing you to train larger models on consumer GPUs.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-purple-500/50 transition-colors group">
+                    <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
+                        <i class="fa-solid fa-file-export text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Easy Export</h3>
+                    <p class="text-slate-400">Native support to export to GGUF (for llama.cpp/Ollama), 16-bit, or 4-bit merged formats.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start Section -->
+    <div id="quickstart" class="py-20 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-white mb-10 flex items-center">
+                <span class="bg-hf-yellow text-black w-8 h-8 rounded flex items-center justify-center text-lg mr-4 font-mono">1</span>
+                Quick Start Guide
+            </h2>
+
+            <!-- Step 1 -->
+            <div class="mb-12 relative pl-8 border-l border-slate-800">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
+                <h3 class="text-xl font-semibold text-white mb-4">Install Dependencies</h3>
+                <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
+                    <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-black">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">bash</span>
+                        <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <pre class="p-4 font-mono text-sm text-gray-300 overflow-x-auto"><code>pip install -r requirements.txt</code></pre>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="mb-12 relative pl-8 border-l border-slate-800">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
+                <h3 class="text-xl font-semibold text-white mb-4">Prepare Dataset</h3>
+                <p class="text-slate-400 mb-4 text-sm">Create a JSONL file. The format must include the <code class="bg-slate-800 px-1 py-0.5 rounded text-hf-yellow">messages</code> structure.</p>
+                <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
+                    <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-black">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">data.jsonl</span>
+                        <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white transition-colors">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <pre class="p-4 font-mono text-sm text-gray-300 overflow-x-auto"><code>{"messages": [{"role": "user", "content": "Explain quantum computing"}, {"role": "assistant", "content": "Quantum computing uses..."}]}
+{"messages": [{"role": "system", "content": "You are a helpful pirate."}, {"role": "user", "content": "Hello"}, {"role": "assistant", "content": "Ahoy matey!"}]}</code></pre>
+                </div>
+            </div>
+
+            <!-- Step 3, 4, 5 Grid -->
+            <div class="grid md:grid-cols-3 gap-6 relative pl-8 border-l border-slate-800">
+                <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
+                
+                <!-- Train -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-2">3. Train</h3>
+                    <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
+                        <pre class="p-3 font-mono text-sm text-gray-300"><code>python train.py</code></pre>
+                    </div>
+                </div>
+
+                <!-- Evaluate -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-2">4. Evaluate</h3>
+                    <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
+                        <pre class="p-3 font-mono text-sm text-gray-300"><code>python eval.py</code></pre>
+                    </div>
+                </div>
+
+                <!-- Export -->
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-2">5. Export</h3>
+                    <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
+                        <pre class="p-3 font-mono text-sm text-gray-300"><code>python export.py</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Section -->
+    <div id="config" class="py-20 bg-[#0F1420]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12">
+                
+                <!-- LoRA Config -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fa-solid fa-sliders text-hf-yellow mr-3"></i> LoRA Configuration
+                    </h2>
+                    <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+                        <div class="p-4 bg-slate-800/50 border-b border-slate-800">
+                            <span class="font-mono text-sm text-slate-400">config.json settings</span>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                <span class="text-slate-300 font-mono text-sm">r (rank)</span>
+                                <span class="text-unsloth-neon font-mono text-sm">16</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                <span class="text-slate-300 font-mono text-sm">lora_alpha</span>
+                                <span class="text-unsloth-neon font-mono text-sm">16</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                                <span class="text-slate-300 font-mono text-sm">lora_dropout</span>
+                                <span class="text-unsloth-neon font-mono text-sm">0</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-300 font-mono text-sm block mb-2">target_modules</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-slate-800 rounded text-xs text-blue-300 border border-slate-700">q_proj</span>
+                                    <span class="px-2 py-1 bg-slate-800 rounded text-xs text-blue-300 border border-slate-700">k_proj</span>
+                                    <span class="px-2 py-1 bg-slate-800 rounded text-xs text-blue-300 border border-slate-700">v_proj</span>
+                                    <span class="px-2 py-1 bg-slate-800 rounded text-xs text-blue-300 border border-slate-700">o_proj</span>
+                                    <span class="px-2 py-1 bg-slate-800 rounded text-xs text-blue-300 border border-slate-700">gate/up/down</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Config -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fa-solid fa-graduation-cap text-llama-blue mr-3"></i> Training Settings
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-xs text-slate-500 uppercase border-b border-slate-700">
+                                    <th class="py-3 font-semibold">Setting</th>
+                                    <th class="py-3 font-semibold">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-3 text-slate-300">Learning Rate</td>
+                                    <td class="py-3 font-mono text-hf-yellow">0.0002</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-3 text-slate-300">Batch Size</td>
+                                    <td class="py-3 font-mono text-white">4</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-3 text-slate-300">Gradient Accumulation</td>
+                                    <td class="py-3 font-mono text-white">4</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-3 text-slate-300">Max Sequence Length</td>
+                                    <td class="py-3 font-mono text-white">2048</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-3 text-slate-300">Optimizer</td>
+                                    <td class="py-3 font-mono text-white">AdamW 8-bit</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usage Tabs Section -->
+    <div class="py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-white mb-8 text-center">Using Your Model</h2>
+        
+        <div class="bg-[#1E1E1E] rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+            <!-- Tabs Header -->
+            <div class="flex border-b border-slate-700">
+                <button onclick="switchTab('unsloth')" id="tab-unsloth" class="flex-1 py-4 text-sm font-medium text-center bg-[#252526] text-white border-b-2 border-unsloth-neon hover:bg-[#2a2a2c] transition-colors">
+                    <i class="fa-solid fa-bolt mr-2 text-unsloth-neon"></i> With Unsloth
+                </button>
+                <button onclick="switchTab('hf')" id="tab-hf" class="flex-1 py-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors">
+                    <i class="fa-solid fa-face-smile mr-2 text-hf-yellow"></i> HuggingFace
+                </button>
+                <button onclick="switchTab('ollama')" id="tab-ollama" class="flex-1 py-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors">
+                    <i class="fa-solid fa-terminal mr-2 text-blue-400"></i> Ollama
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="relative min-h-[300px]">
+                
+                <!-- Unsloth Content -->
+                <div id="content-unsloth" class="p-6 animate-fade-in block">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Recommended</span>
+                        <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code>from unsloth import FastLanguageModel
+
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name="./output",
+    max_seq_length=2048,
+    load_in_4bit=True,
+)
+FastLanguageModel.for_inference(model)
+
+messages = [{"role": "user", "content": "Hello!"}]
+formatted = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+inputs = tokenizer(formatted, return_tensors="pt").to("cuda")
+
+outputs = model.generate(**inputs, max_new_tokens=200)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
+                </div>
+
+                <!-- HF Content -->
+                <div id="content-hf" class="p-6 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-mono text-hf-yellow bg-hf-yellow/10 px-2 py-1 rounded">After Merging</span>
+                        <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code>from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained("./output_merged_16bit")
+model = AutoModelForCausalLM.from_pretrained("./output_merged_16bit")
+
+# Now use as a standard Hugging Face model
+inputs = tokenizer("Hello!", return_tensors="pt")
+outputs = model.generate(**inputs, max_new_tokens=50)</code></pre>
+                </div>
+
+                <!-- Ollama Content -->
+                <div id="content-ollama" class="p-6 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-mono text-blue-400 bg-blue-400/10 px-2 py-1 rounded">After GGUF Export</span>
+                        <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code># Create the model in Ollama
+ollama create my-model -f Modelfile
+
+# Run the model
+ollama run my-model</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Troubleshooting / Export Formats -->
+    <div id="troubleshooting" class="bg-[#0F1420] py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-white mb-8">Troubleshooting & Export</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- FAQ -->
+                <div class="space-y-4">
+                    <details class="group bg-slate-900 rounded-lg border border-slate-800 open:border-hf-yellow/50 transition-colors">
+                        <summary class="flex justify-between items-center cursor-pointer p-4 font-medium text-slate-200">
+                            <span>Running Out of Memory (OOM)?</span>
+                            <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-sm"></i></span>
+                        </summary>
+                        <div class="px-4 pb-4 text-sm text-slate-400">
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Reduce <code class="text-pink-400">per_device_train_batch_size</code> to 1</li>
+                                <li>Increase <code class="text-pink-400">gradient_accumulation_steps</code> to 8</li>
+                                <li>Reduce <code class="text-pink-400">max_seq_length</code> to 1024</li>
+                            </ul>
+                        </div>
+                    </details>
+                    
+                    <details class="group bg-slate-900 rounded-lg border border-slate-800 open:border-hf-yellow/50 transition-colors">
+                        <summary class="flex justify-between items-center cursor-pointer p-4 font-medium text-slate-200">
+                            <span>Training is slow?</span>
+                            <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-sm"></i></span>
+                        </summary>
+                        <div class="px-4 pb-4 text-sm text-slate-400">
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Ensure GPU acceleration is active.</li>
+                                <li>Verify Unsloth installation.</li>
+                                <li>Ensure <code class="text-pink-400">load_in_4bit=True</code> is set.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-900 rounded-lg border border-slate-800 open:border-hf-yellow/50 transition-colors">
+                        <summary class="flex justify-between items-center cursor-pointer p-4 font-medium text-slate-200">
+                            <span>Chat Output looks wrong?</span>
+                            <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-sm"></i></span>
+                        </summary>
+                        <div class="px-4 pb-4 text-sm text-slate-400">
+                            <p>Models use different chat templates. Check the base model's HuggingFace card. Some require <code class="text-pink-400">add_generation_prompt=True</code>.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Export Table -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Export Options</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead>
+                                <tr class="text-slate-500 border-b border-slate-700">
+                                    <th class="pb-2">Format</th>
+                                    <th class="pb-2">Size</th>
+                                    <th class="pb-2">Target</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-300">
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-2 text-unsloth-neon">LoRA Adapter</td>
+                                    <td class="py-2">~50MB</td>
+                                    <td class="py-2">Base Model</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-2 text-blue-400">GGUF q4_k_m</td>
+                                    <td class="py-2">~2-4GB</td>
+                                    <td class="py-2">llama.cpp / Ollama</td>
+                                </tr>
+                                <tr class="border-b border-slate-800/50">
+                                    <td class="py-2 text-blue-400">GGUF q8_0</td>
+                                    <td class="py-2">~4-8GB</td>
+                                    <td class="py-2">High Quality</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 text-purple-400">16-bit Merged</td>
+                                    <td class="py-2">~6-14GB</td>
+                                    <td class="py-2">Hugging Face</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-[#0B0F19] pt-12 pb-8 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="https://github.com/unslothai/unsloth" class="text-slate-400 hover:text-unsloth-neon transition-colors"><i class="fa-brands fa-github text-2xl"></i></a>
+                <a href="https://huggingface.co/docs/peft" class="text-slate-400 hover:text-hf-yellow transition-colors"><i class="fa-solid fa-face-smile text-2xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-500 transition-colors"><i class="fa-brands fa-twitter text-2xl"></i></a>
+            </div>
+            <p class="text-slate-600 text-sm">
+                Project maintained by <span class="text-slate-400">Mo-Shakib</span>. 
+                Based on Meta Llama 3.2 and Unsloth AI.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all contents
+            ['unsloth', 'hf', 'ollama'].forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`content-${id}`).classList.remove('block');
+                
+                // Reset tab styles
+                const tab = document.getElementById(`tab-${id}`);
+                tab.classList.remove('text-white', 'bg-[#252526]', 'border-b-2');
+                tab.classList.add('text-slate-400', 'bg-[#1E1E1E]', 'border-transparent');
+                
+                // Remove specific border colors
+                if(id === 'unsloth') tab.classList.remove('border-unsloth-neon');
+                if(id === 'hf') tab.classList.remove('border-hf-yellow');
+                if(id === 'ollama') tab.classList.remove('border-blue-400');
+            });
+
+            // Show selected content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`content-${tabId}`).classList.add('block');
+
+            // Activate selected tab
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.remove('text-slate-400', 'bg-[#1E1E1E]', 'border-transparent');
+            activeTab.classList.add('text-white', 'bg-[#252526]', 'border-b-2');
+
+            // Add specific border color
+            if(tabId === 'unsloth') activeTab.classList.add('border-unsloth-neon');
+            if(tabId === 'hf') activeTab.classList.add('border-hf-yellow');
+            if(tabId === 'ollama') activeTab.classList.add('border-blue-400');
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(button) {
+            const container = button.closest('.code-window') || button.closest('.block');
+            const code = container.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fa-solid fa-check text-green-500"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
