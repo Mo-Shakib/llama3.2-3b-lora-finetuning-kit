@@ -1,4 +1,4 @@
-# Fine-Tuning Training Package
+# llama3.2-3b-lora-finetuning-kit
 
 ## Overview
 
