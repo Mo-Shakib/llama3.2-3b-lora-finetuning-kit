@@ -86,59 +86,87 @@
     <nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#0B0F19]/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-llama-blue to-unsloth-neon flex items-center justify-center text-black font-bold text-lg">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <span class="font-bold text-lg tracking-tight text-white">Llama 3.2 Finetune Kit</span>
+                    <span class="font-bold text-lg tracking-tight text-white hidden sm:block">Llama 3.2 Finetune Kit</span>
+                    <span class="font-bold text-lg tracking-tight text-white sm:hidden">Llama Kit</span>
                 </div>
+
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                     <a href="#overview" class="hover:text-hf-yellow transition-colors">Overview</a>
                     <a href="#quickstart" class="hover:text-hf-yellow transition-colors">Quick Start</a>
                     <a href="#config" class="hover:text-hf-yellow transition-colors">Config</a>
                     <a href="#troubleshooting" class="hover:text-hf-yellow transition-colors">FAQ</a>
                 </div>
-                <a href="https://github.com/Mo-Shakib/llama3.2-3b-lora-finetuning-kit" target="_blank" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-all border border-white/5 group">
-                    <i class="fa-brands fa-github text-lg group-hover:scale-110 transition-transform"></i>
-                    <span>Star on GitHub</span>
+
+                <!-- GitHub Button (Desktop) -->
+                <div class="hidden md:flex">
+                    <a href="https://github.com/Mo-Shakib/llama3.2-3b-lora-finetuning-kit" target="_blank" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-all border border-white/5 group">
+                        <i class="fa-brands fa-github text-lg group-hover:scale-110 transition-transform"></i>
+                        <span>Star on GitHub</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0F1420] border-b border-white/5 absolute w-full left-0">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="#overview" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Overview</a>
+                <a href="#quickstart" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Quick Start</a>
+                <a href="#config" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Config</a>
+                <a href="#troubleshooting" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">FAQ</a>
+                <a href="https://github.com/Mo-Shakib/llama3.2-3b-lora-finetuning-kit" target="_blank" class="block px-3 py-2 rounded-md text-base font-medium text-hf-yellow hover:bg-white/5 mt-2">
+                    <i class="fa-brands fa-github mr-2"></i> Star on GitHub
                 </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden">
+    <div id="overview" class="relative pt-24 pb-16 sm:pt-40 sm:pb-24 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-6">
                 <span class="w-2 h-2 rounded-full bg-unsloth-neon animate-pulse"></span>
                 Powered by Unsloth
             </div>
             
-            <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6">
-                Finetune <span class="text-gradient">Llama 3.2 3B</span><br />
+            <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Finetune <span class="text-gradient">Llama 3.2</span><br />
                 Faster & Efficiently
             </h1>
             
-            <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p class="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed px-2">
                 A complete kit for LoRA fine-tuning using Unsloth. 
                 Experience <span class="text-white font-semibold">2-5x faster training</span> 
                 with <span class="text-white font-semibold">70% less memory</span> usage.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#quickstart" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-black bg-hf-yellow hover:bg-[#ebbf00] transition-colors shadow-[0_0_20px_rgba(255,210,30,0.3)]">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center px-4">
+                <a href="#quickstart" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-black bg-hf-yellow hover:bg-[#ebbf00] transition-colors shadow-[0_0_20px_rgba(255,210,30,0.3)] w-full sm:w-auto">
                     <i class="fa-solid fa-play mr-2"></i> Start Training
                 </a>
-                <a href="#features" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                <a href="#features" class="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors w-full sm:w-auto">
                     Learn More
                 </a>
             </div>
 
             <!-- Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-16 text-left">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-16 text-left px-4 sm:px-0">
                 <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
                     <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Base Model</div>
-                    <div class="font-mono text-sm text-blue-400">Llama-3.2-3B-Instruct</div>
+                    <div class="font-mono text-sm text-blue-400 break-all">Llama-3.2-3B-Instruct</div>
                 </div>
                 <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
                     <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Method</div>
@@ -157,14 +185,14 @@
     </div>
 
     <!-- Features Section -->
-    <div id="features" class="py-20 bg-[#0F1420]">
+    <div id="features" class="py-16 md:py-20 bg-[#0F1420]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-12 md:mb-16">
                 <h2 class="text-3xl font-bold text-white mb-4">Why Unsloth?</h2>
                 <div class="h-1 w-20 bg-gradient-to-r from-llama-blue to-unsloth-neon mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-6 md:gap-8">
                 <!-- Card 1 -->
                 <div class="glass-card p-6 rounded-2xl hover:border-unsloth-neon/50 transition-colors group">
                     <div class="w-12 h-12 rounded-lg bg-unsloth-neon/10 flex items-center justify-center mb-4 group-hover:bg-unsloth-neon/20 transition-colors">
@@ -196,15 +224,15 @@
     </div>
 
     <!-- Quick Start Section -->
-    <div id="quickstart" class="py-20 relative">
+    <div id="quickstart" class="py-16 md:py-20 relative">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-white mb-10 flex items-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-10 flex items-center">
                 <span class="bg-hf-yellow text-black w-8 h-8 rounded flex items-center justify-center text-lg mr-4 font-mono">1</span>
                 Quick Start Guide
             </h2>
 
             <!-- Step 1 -->
-            <div class="mb-12 relative pl-8 border-l border-slate-800">
+            <div class="mb-12 relative pl-6 md:pl-8 border-l border-slate-800">
                 <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
                 <h3 class="text-xl font-semibold text-white mb-4">Install Dependencies</h3>
                 <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
@@ -224,7 +252,7 @@
             </div>
 
             <!-- Step 2 -->
-            <div class="mb-12 relative pl-8 border-l border-slate-800">
+            <div class="mb-12 relative pl-6 md:pl-8 border-l border-slate-800">
                 <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
                 <h3 class="text-xl font-semibold text-white mb-4">Prepare Dataset</h3>
                 <p class="text-slate-400 mb-4 text-sm">Create a JSONL file. The format must include the <code class="bg-slate-800 px-1 py-0.5 rounded text-hf-yellow">messages</code> structure.</p>
@@ -246,11 +274,11 @@
             </div>
 
             <!-- Step 3, 4, 5 Grid -->
-            <div class="grid md:grid-cols-3 gap-6 relative pl-8 border-l border-slate-800">
+            <div class="grid md:grid-cols-3 gap-6 relative pl-6 md:pl-8 border-l border-slate-800">
                 <div class="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-slate-600"></div>
                 
                 <!-- Train -->
-                <div>
+                <div class="mb-6 md:mb-0">
                     <h3 class="text-lg font-semibold text-white mb-2">3. Train</h3>
                     <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
                         <pre class="p-3 font-mono text-sm text-gray-300"><code>python train.py</code></pre>
@@ -258,7 +286,7 @@
                 </div>
 
                 <!-- Evaluate -->
-                <div>
+                <div class="mb-6 md:mb-0">
                     <h3 class="text-lg font-semibold text-white mb-2">4. Evaluate</h3>
                     <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
                         <pre class="p-3 font-mono text-sm text-gray-300"><code>python eval.py</code></pre>
@@ -266,7 +294,7 @@
                 </div>
 
                 <!-- Export -->
-                <div>
+                <div class="mb-6 md:mb-0">
                     <h3 class="text-lg font-semibold text-white mb-2">5. Export</h3>
                     <div class="code-window bg-[#1E1E1E] rounded-lg overflow-hidden border border-slate-700">
                         <pre class="p-3 font-mono text-sm text-gray-300"><code>python export.py</code></pre>
@@ -277,7 +305,7 @@
     </div>
 
     <!-- Configuration Section -->
-    <div id="config" class="py-20 bg-[#0F1420]">
+    <div id="config" class="py-16 md:py-20 bg-[#0F1420]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12">
                 
@@ -322,34 +350,34 @@
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                         <i class="fa-solid fa-graduation-cap text-llama-blue mr-3"></i> Training Settings
                     </h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
+                    <div class="overflow-x-auto rounded-lg border border-slate-800">
+                        <table class="w-full text-left border-collapse min-w-[300px]">
+                            <thead class="bg-slate-900">
                                 <tr class="text-xs text-slate-500 uppercase border-b border-slate-700">
-                                    <th class="py-3 font-semibold">Setting</th>
-                                    <th class="py-3 font-semibold">Value</th>
+                                    <th class="py-3 px-4 font-semibold">Setting</th>
+                                    <th class="py-3 px-4 font-semibold">Value</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-sm">
+                            <tbody class="text-sm bg-slate-900/50">
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-3 text-slate-300">Learning Rate</td>
-                                    <td class="py-3 font-mono text-hf-yellow">0.0002</td>
+                                    <td class="py-3 px-4 text-slate-300">Learning Rate</td>
+                                    <td class="py-3 px-4 font-mono text-hf-yellow">0.0002</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-3 text-slate-300">Batch Size</td>
-                                    <td class="py-3 font-mono text-white">4</td>
+                                    <td class="py-3 px-4 text-slate-300">Batch Size</td>
+                                    <td class="py-3 px-4 font-mono text-white">4</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-3 text-slate-300">Gradient Accumulation</td>
-                                    <td class="py-3 font-mono text-white">4</td>
+                                    <td class="py-3 px-4 text-slate-300">Grad Accumulation</td>
+                                    <td class="py-3 px-4 font-mono text-white">4</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-3 text-slate-300">Max Sequence Length</td>
-                                    <td class="py-3 font-mono text-white">2048</td>
+                                    <td class="py-3 px-4 text-slate-300">Max Seq Length</td>
+                                    <td class="py-3 px-4 font-mono text-white">2048</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-3 text-slate-300">Optimizer</td>
-                                    <td class="py-3 font-mono text-white">AdamW 8-bit</td>
+                                    <td class="py-3 px-4 text-slate-300">Optimizer</td>
+                                    <td class="py-3 px-4 font-mono text-white">AdamW 8-bit</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -360,19 +388,19 @@
     </div>
 
     <!-- Usage Tabs Section -->
-    <div class="py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-white mb-8 text-center">Using Your Model</h2>
+    <div class="py-16 md:py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 text-center">Using Your Model</h2>
         
         <div class="bg-[#1E1E1E] rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
             <!-- Tabs Header -->
-            <div class="flex border-b border-slate-700">
-                <button onclick="switchTab('unsloth')" id="tab-unsloth" class="flex-1 py-4 text-sm font-medium text-center bg-[#252526] text-white border-b-2 border-unsloth-neon hover:bg-[#2a2a2c] transition-colors">
+            <div class="flex flex-col sm:flex-row border-b border-slate-700">
+                <button onclick="switchTab('unsloth')" id="tab-unsloth" class="flex-1 py-3 md:py-4 px-4 text-sm font-medium text-center bg-[#252526] text-white border-l-4 sm:border-l-0 sm:border-b-2 border-unsloth-neon hover:bg-[#2a2a2c] transition-colors flex items-center justify-center sm:block">
                     <i class="fa-solid fa-bolt mr-2 text-unsloth-neon"></i> With Unsloth
                 </button>
-                <button onclick="switchTab('hf')" id="tab-hf" class="flex-1 py-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors">
+                <button onclick="switchTab('hf')" id="tab-hf" class="flex-1 py-3 md:py-4 px-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-l-4 sm:border-l-0 sm:border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors flex items-center justify-center sm:block">
                     <i class="fa-solid fa-face-smile mr-2 text-hf-yellow"></i> HuggingFace
                 </button>
-                <button onclick="switchTab('ollama')" id="tab-ollama" class="flex-1 py-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors">
+                <button onclick="switchTab('ollama')" id="tab-ollama" class="flex-1 py-3 md:py-4 px-4 text-sm font-medium text-center bg-[#1E1E1E] text-slate-400 border-l-4 sm:border-l-0 sm:border-b-2 border-transparent hover:text-white hover:bg-[#252526] transition-colors flex items-center justify-center sm:block">
                     <i class="fa-solid fa-terminal mr-2 text-blue-400"></i> Ollama
                 </button>
             </div>
@@ -381,12 +409,12 @@
             <div class="relative min-h-[300px]">
                 
                 <!-- Unsloth Content -->
-                <div id="content-unsloth" class="p-6 animate-fade-in block">
-                    <div class="flex justify-between items-center mb-4">
+                <div id="content-unsloth" class="p-4 md:p-6 animate-fade-in block">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <span class="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Recommended</span>
                         <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code>from unsloth import FastLanguageModel
+                    <pre class="font-mono text-xs md:text-sm text-gray-300 overflow-x-auto pb-2"><code>from unsloth import FastLanguageModel
 
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name="./output",
@@ -404,12 +432,12 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
                 </div>
 
                 <!-- HF Content -->
-                <div id="content-hf" class="p-6 hidden">
-                    <div class="flex justify-between items-center mb-4">
+                <div id="content-hf" class="p-4 md:p-6 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <span class="text-xs font-mono text-hf-yellow bg-hf-yellow/10 px-2 py-1 rounded">After Merging</span>
                         <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code>from transformers import AutoTokenizer, AutoModelForCausalLM
+                    <pre class="font-mono text-xs md:text-sm text-gray-300 overflow-x-auto pb-2"><code>from transformers import AutoTokenizer, AutoModelForCausalLM
 
 tokenizer = AutoTokenizer.from_pretrained("./output_merged_16bit")
 model = AutoModelForCausalLM.from_pretrained("./output_merged_16bit")
@@ -420,12 +448,12 @@ outputs = model.generate(**inputs, max_new_tokens=50)</code></pre>
                 </div>
 
                 <!-- Ollama Content -->
-                <div id="content-ollama" class="p-6 hidden">
-                    <div class="flex justify-between items-center mb-4">
+                <div id="content-ollama" class="p-4 md:p-6 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <span class="text-xs font-mono text-blue-400 bg-blue-400/10 px-2 py-1 rounded">After GGUF Export</span>
                         <button onclick="copyToClipboard(this)" class="text-xs text-slate-400 hover:text-white"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
-                    <pre class="font-mono text-sm text-gray-300 overflow-x-auto"><code># Create the model in Ollama
+                    <pre class="font-mono text-xs md:text-sm text-gray-300 overflow-x-auto pb-2"><code># Create the model in Ollama
 ollama create my-model -f Modelfile
 
 # Run the model
@@ -436,7 +464,7 @@ ollama run my-model</code></pre>
     </div>
 
     <!-- Troubleshooting / Export Formats -->
-    <div id="troubleshooting" class="bg-[#0F1420] py-20">
+    <div id="troubleshooting" class="bg-[#0F1420] py-16 md:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold text-white mb-8">Troubleshooting & Export</h2>
             
@@ -486,34 +514,34 @@ ollama run my-model</code></pre>
                 <div class="bg-slate-900 rounded-xl border border-slate-800 p-6">
                     <h3 class="text-lg font-semibold text-white mb-4">Export Options</h3>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
+                        <table class="w-full text-sm text-left min-w-[300px]">
                             <thead>
                                 <tr class="text-slate-500 border-b border-slate-700">
-                                    <th class="pb-2">Format</th>
-                                    <th class="pb-2">Size</th>
-                                    <th class="pb-2">Target</th>
+                                    <th class="pb-2 px-2">Format</th>
+                                    <th class="pb-2 px-2">Size</th>
+                                    <th class="pb-2 px-2">Target</th>
                                 </tr>
                             </thead>
                             <tbody class="text-slate-300">
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-2 text-unsloth-neon">LoRA Adapter</td>
-                                    <td class="py-2">~50MB</td>
-                                    <td class="py-2">Base Model</td>
+                                    <td class="py-2 px-2 text-unsloth-neon">LoRA Adapter</td>
+                                    <td class="py-2 px-2">~50MB</td>
+                                    <td class="py-2 px-2">Base Model</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-2 text-blue-400">GGUF q4_k_m</td>
-                                    <td class="py-2">~2-4GB</td>
-                                    <td class="py-2">llama.cpp / Ollama</td>
+                                    <td class="py-2 px-2 text-blue-400">GGUF q4_k_m</td>
+                                    <td class="py-2 px-2">~2-4GB</td>
+                                    <td class="py-2 px-2">llama.cpp / Ollama</td>
                                 </tr>
                                 <tr class="border-b border-slate-800/50">
-                                    <td class="py-2 text-blue-400">GGUF q8_0</td>
-                                    <td class="py-2">~4-8GB</td>
-                                    <td class="py-2">High Quality</td>
+                                    <td class="py-2 px-2 text-blue-400">GGUF q8_0</td>
+                                    <td class="py-2 px-2">~4-8GB</td>
+                                    <td class="py-2 px-2">High Quality</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-2 text-purple-400">16-bit Merged</td>
-                                    <td class="py-2">~6-14GB</td>
-                                    <td class="py-2">Hugging Face</td>
+                                    <td class="py-2 px-2 text-purple-400">16-bit Merged</td>
+                                    <td class="py-2 px-2">~6-14GB</td>
+                                    <td class="py-2 px-2">Hugging Face</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -539,6 +567,11 @@ ollama run my-model</code></pre>
     </footer>
 
     <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
         // Tab Switching Logic
         function switchTab(tabId) {
             // Hide all contents
@@ -548,7 +581,7 @@ ollama run my-model</code></pre>
                 
                 // Reset tab styles
                 const tab = document.getElementById(`tab-${id}`);
-                tab.classList.remove('text-white', 'bg-[#252526]', 'border-b-2');
+                tab.classList.remove('text-white', 'bg-[#252526]', 'sm:border-b-2', 'border-l-4');
                 tab.classList.add('text-slate-400', 'bg-[#1E1E1E]', 'border-transparent');
                 
                 // Remove specific border colors
@@ -564,7 +597,7 @@ ollama run my-model</code></pre>
             // Activate selected tab
             const activeTab = document.getElementById(`tab-${tabId}`);
             activeTab.classList.remove('text-slate-400', 'bg-[#1E1E1E]', 'border-transparent');
-            activeTab.classList.add('text-white', 'bg-[#252526]', 'border-b-2');
+            activeTab.classList.add('text-white', 'bg-[#252526]', 'sm:border-b-2', 'border-l-4');
 
             // Add specific border color
             if(tabId === 'unsloth') activeTab.classList.add('border-unsloth-neon');
